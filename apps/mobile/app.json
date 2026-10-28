@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "MUSE · 灵感收藏馆",
+    "slug": "muse",
+    "scheme": "muse",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "com.muse.app"
+    },
+    "android": {
+      "package": "com.muse.app"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": false,
+          "microphonePermission": false,
+          "photosPermission": "允许 MUSE 选择你想收藏的图片与视频。"
+        }
+      ],
+      "expo-video",
+      "expo-sqlite"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

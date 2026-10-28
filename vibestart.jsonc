@@ -1,0 +1,21 @@
+{
+  "$schema": "https://vibestart.net/schema.json",
+
+  "name": "muse",
+  "version": "0.1.3",
+
+  "stack": {
+    "toolchain": "vite-plus",
+    "frontend": "react",
+    "framework": "spa",
+    "router": "tanstack-router",
+    "ui": "shadcn",
+    "desktop": "electron",
+    "mobile": "expo",
+    "testing": "playwright",
+  },
+
+  "addons": [],
+
+  "channel": "recommended",
+}

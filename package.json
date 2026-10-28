@@ -1,0 +1,34 @@
+{
+  "name": "muse",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp run -r --parallel dev",
+    "build": "vp run -r build",
+    "ready": "vp check && vp test && vp run test:e2e && vp run -r build",
+    "prepare": "vp config",
+    "package:desktop": "vp run --filter @muse/desktop package",
+    "dev:mobile": "vp run --filter @muse/mobile start",
+    "test:e2e": "vp run --filter @muse/web test:e2e",
+    "build:site": "vp run --filter @muse/web build && node scripts/prepare-site.mjs"
+  },
+  "devDependencies": {
+    "@muse/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.15.0",
+      "onFail": "warn"
+    }
+  },
+  "engines": {
+    "node": "24.22.1",
+    "pnpm": "12.15.0"
+  }
+}

@@ -1,0 +1,45 @@
+name: Windows release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      VP_HOME: ${{ runner.temp }}\muse-vite-plus
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.22.1
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12.15.0
+          run_install: false
+      - name: Install Vite+
+        shell: pwsh
+        run: |
+          Invoke-RestMethod https://vite.plus/ps1 | Invoke-Expression
+          "$env:VP_HOME\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Verify tag version
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          if ($env:GITHUB_REF_NAME -ne "v$version") { throw 'Tag and application version must match.' }
+      - run: vp install --frozen-lockfile
+      - run: vp exec playwright install chromium
+        working-directory: apps/web
+      - run: vp run ready
+      - run: vp run package:desktop
+      - name: Publish installers and update feed
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $files = Get-ChildItem apps/desktop/release/* -File | Where-Object { $_.Extension -in '.exe', '.blockmap' -or $_.Name -eq 'latest.yml' } | Select-Object -ExpandProperty FullName
+          gh release create $env:GITHUB_REF_NAME @files --verify-tag --generate-notes --title "MUSE $env:GITHUB_REF_NAME"

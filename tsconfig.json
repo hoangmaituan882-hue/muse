@@ -1,0 +1,4 @@
+{
+  "extends": "@muse/config/typescript/node.json",
+  "include": ["vite.config.ts", "apps/mobile/metro.config.ts"]
+}
