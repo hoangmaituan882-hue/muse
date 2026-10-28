@@ -1,8 +1,12 @@
 name: Windows release
 
 on:
-  push:
-    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing version tag to package, for example v0.1.1"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -12,8 +16,11 @@ jobs:
     runs-on: windows-latest
     env:
       VP_HOME: ${{ runner.temp }}\muse-vite-plus
+      RELEASE_TAG: ${{ inputs.tag }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
       - uses: actions/setup-node@v7
         with:
           node-version: 24.22.1
@@ -30,7 +37,7 @@ jobs:
         shell: pwsh
         run: |
           $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
-          if ($env:GITHUB_REF_NAME -ne "v$version") { throw 'Tag and application version must match.' }
+          if ($env:RELEASE_TAG -ne "v$version") { throw 'Tag and application version must match.' }
       - run: vp install --frozen-lockfile
       - run: vp exec playwright install chromium
         working-directory: apps/web
@@ -42,4 +49,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $files = Get-ChildItem apps/desktop/release/* -File | Where-Object { $_.Extension -in '.exe', '.blockmap' -or $_.Name -eq 'latest.yml' } | Select-Object -ExpandProperty FullName
-          gh release create $env:GITHUB_REF_NAME @files --verify-tag --generate-notes --title "MUSE $env:GITHUB_REF_NAME"
+          gh release create $env:RELEASE_TAG @files --verify-tag --generate-notes --title "MUSE $env:RELEASE_TAG"

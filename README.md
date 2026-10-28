@@ -53,7 +53,7 @@ vp env exec --node 24.22.1 --package-manager pnpm@12.15.0 vp run dev
 
 安装版启动后及每六小时检查稳定版更新。设置中可以手动检查；发现新版后点击「下载更新」，下载校验完成后点击「重启安装」。应用不会在整理素材时自行退出。免安装版和实时开发版不执行安装更新。
 
-未来发布一个新版：
+打包和发布只在用户明确要求时执行；代码修改、提交、推送和创建版本标签都不会自动打包。需要发布新版时，先保存对应版本与标签：
 
 ```powershell
 node scripts/set-version.mjs 0.1.1
@@ -64,7 +64,7 @@ git push origin main
 git push origin v0.1.1
 ```
 
-版本标签触发 `.github/workflows/release.yml`：检查版本一致、执行完整验证、构建 Windows 安装版及免安装版，再上传 `.exe`、`.blockmap` 和 `latest.yml`。安装版会从同一更新源发现新版。自动发布使用仓库内置的短期 `GITHUB_TOKEN`，不需要把个人令牌写入源码。正式分发前可在仓库 Secrets 中配置 Windows 签名证书；当前构建未签名。
+用户明确要求打包后，再手动运行 GitHub Actions 的 `Windows release`，填入既有版本标签。该流程检查版本一致、执行完整验证、构建 Windows 安装版及免安装版，再上传 `.exe`、`.blockmap` 和 `latest.yml`。安装版会从同一更新源发现新版。发布流程使用仓库内置的短期 `GITHUB_TOKEN`，不需要把个人令牌写入源码。正式分发前可在仓库 Secrets 中配置 Windows 签名证书；当前构建未签名。
 
 本机安装程序默认位置为 `E:\MUSE`，也可选择其他可写目录。正式版把数据、缓存、日志和更新下载放在可执行程序旁的 `MUSE Data`；免安装版放在原始启动文件旁。更新不会删除此数据目录。请将软件保留在有写入权限的非系统盘；不要安装到需要管理员权限写入的目录。Windows 自身的系统日志、临时记录及 GitHub 云端构建机器的磁盘安排不由项目控制。
 

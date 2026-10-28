@@ -32,6 +32,10 @@ release. Add a tool name to select part of the graph. For example, run
 
 # Project
 
+## Owner instructions
+
+Keep the live development app available. Do not package applications, produce installers, publish binary releases, or dispatch a release workflow unless the user explicitly asks to package. Source edits, checks and GitHub code pushes do not authorize packaging. The release workflow is manual only; never restore tag or push triggers without the user's request. Keep project tools, caches, temporary files and application data on the workspace drive, outside C:.
+
 `vibestart.jsonc` records the stack this project was created with. When it also records the `name` and `version` of the vibestart release that generated the project, the vibestart CLI maintains the project from it: `npx vibestart-cli add` adds a capability, and `npx vibestart-cli upgrade --dry-run` previews a template upgrade. Leave `vibestart.jsonc` as the CLI wrote it. An upgrade merges infrastructure files such as `package.json`, `vite.config.ts`, and this file, and lists template changes to starter source, which is yours to edit, as manual changes to port.
 
 ## Code
