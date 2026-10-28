@@ -19,7 +19,7 @@ Windows 安装程序与免安装版本输出到 `apps/desktop/release`。手机�
 
 ## 开发
 
-项目要求 Node.js 24.22.1、pnpm 12.15.0 和 Vite+。本机直接运行根目录 `Start-MUSE-Dev.ps1`：网页界面修改会立即显示；Electron 主进程、预加载脚本及共享通信代码变动后，会自动重建并重新打开窗口。
+项目要求 Node.js 24.22.1、pnpm 12.15.0 和 Vite+。本机双击根目录 `Start-MUSE-Dev.cmd`（或运行 `Start-MUSE-Dev.ps1`）：网页界面修改会立即显示；Electron 主进程、预加载脚本及共享通信代码变动后，会自动重建并重新打开窗口。
 
 本机工具放在 `.local/tools`，数据在 `.local/data/development`，临时文件和下载缓存在 `.local` 内；pnpm 复用当前盘根目录的 `.pnpm-store`。此前桌面数据已复制保存到 `.local/data/previous-desktop`。这些目录不上传 GitHub。启动入口仅修改当前进程的环境，不更改系统设置。
 

@@ -21,17 +21,31 @@ const stopChild = async () => {
   child = undefined;
   if (!previous?.pid || previous.exitCode !== null || previous.signalCode !== null) return;
   await new Promise<void>((resolve) => {
-    previous.once("exit", () => resolve());
-    if (process.platform === "win32") {
-      const killer = spawn("taskkill", ["/pid", String(previous.pid), "/t", "/f"], {
-        windowsHide: true,
-        stdio: "ignore",
-      });
-      killer.once("error", () => {
+    const force = () => {
+      if (process.platform === "win32") {
+        const killer = spawn("taskkill", ["/pid", String(previous.pid), "/t", "/f"], {
+          windowsHide: true,
+          stdio: "ignore",
+        });
+        killer.once("error", () => {
+          previous.kill();
+        });
+      } else {
         previous.kill();
+      }
+    };
+    const timeout = setTimeout(force, 5000);
+    previous.once("exit", () => {
+      clearTimeout(timeout);
+      resolve();
+    });
+    // Let Chromium flush the library before replacing the process; force termination is only for a hung app.
+    if (previous.connected) {
+      previous.send("muse:stop", (error) => {
+        if (error) force();
       });
     } else {
-      previous.kill();
+      force();
     }
   });
 };
@@ -48,7 +62,7 @@ const restart = () => {
         {
           cwd: root,
           env: { ...process.env, ELECTRON_RENDERER_URL: rendererUrl },
-          stdio: "inherit",
+          stdio: ["inherit", "inherit", "inherit", "ipc"],
         },
       );
       child.on("error", (error) => console.error("MUSE could not start:", error));

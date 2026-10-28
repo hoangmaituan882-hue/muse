@@ -2,6 +2,12 @@
   "name": "@muse/desktop",
   "version": "0.1.0",
   "private": true,
+  "description": "MUSE visual inspiration library for images, videos and links",
+  "author": "hoangmaituan882-hue",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hoangmaituan882-hue/muse.git"
+  },
   "type": "module",
   "main": "./dist/main/index.js",
   "imports": {
@@ -13,7 +19,8 @@
     "dev": "node scripts/dev.ts"
   },
   "dependencies": {
-    "electron-updater": "catalog:"
+    "electron-updater": "^6.8.11",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@muse/config": "workspace:*",
@@ -23,7 +30,6 @@
     "electron-builder": "catalog:",
     "es-toolkit": "catalog:",
     "typescript": "catalog:",
-    "vite-plus": "catalog:",
-    "zod": "catalog:"
+    "vite-plus": "catalog:"
   }
 }

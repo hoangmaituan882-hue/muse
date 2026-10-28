@@ -28,6 +28,8 @@ nsis:
   allowToChangeInstallationDirectory: true
   perMachine: false
   include: build/installer.nsh
+  createDesktopShortcut: false
+  createStartMenuShortcut: false
 linux:
   target:
     - AppImage

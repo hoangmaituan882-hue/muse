@@ -1,6 +1,6 @@
 import path from "node:path";
 
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, session } from "electron";
 
 import { rendererOrigin } from "@muse/electron";
 
@@ -46,6 +46,14 @@ const open = () =>
   });
 
 const start = () => {
+  if (devOrigin !== null) {
+    process.on("message", (message: unknown) => {
+      if (message === "muse:stop") {
+        session.defaultSession.flushStorageData();
+        app.quit();
+      }
+    });
+  }
   const updates = createUpdates(dataRoot);
   setupIpc(devOrigin, updates);
 

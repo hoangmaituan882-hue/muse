@@ -19,6 +19,8 @@ export const configureDataPaths = () => {
     mkdirSync(directory, { recursive: true });
     app.setPath(name, directory);
   }
+  process.env.TEMP = app.getPath("temp");
+  process.env.TMP = app.getPath("temp");
   app.commandLine.appendSwitch("disk-cache-dir", path.join(base, "session", "Cache"));
   return base;
 };

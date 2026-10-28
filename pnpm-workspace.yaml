@@ -61,7 +61,6 @@ catalog:
   electron: ^45.1.0
   electron-builder: ^26.18.0
   expo-video: ~58.0.12
-  electron-updater: ^6.8.11
 
 overrides:
   vite@*: "catalog:"
